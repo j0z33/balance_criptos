@@ -23,6 +23,19 @@ function ctrl_c(){
         tput cnorm; exit 1
 }
 
+#variables globales
+criptos=$1
+
+if [[ ! ${criptos} || ! -f $criptos  ]]; then
+        echo -e "\n${yellowColour}[*]Debes indicar un fichero con los valores de las criptomonedas separados por ;(punto y coma). Aplicados en el siguiente orden:${endColour}"
+        echo -e "${yellowColour}   NombreMoneda;siglasMoneda;CantidadComprada;PrecioCompra${endColour}"
+        echo -e "${yellowColour}[-]El nombre de la moneda tiene que coincidir con el nombre de la URL de coinmarketcap.com${endColour}"
+        echo -e "${yellowColour}[-]Para Bitcoin sería bitcoin ya que acaba así: https://coinmarketcap.com/es/currencies/bitcoin/${endColour}"
+        echo -e "\t\n${blueColour}  Ejemplo:${endColour}"
+        echo -e "\t\t${blueColour}  bitcoin;BTC;0,00114316;42.893${endColour}\n"
+
+        tput cnorm; exit 1
+fi
 
 ######################################Estas funciones son para generar tablas##########################
 function printTable(){
@@ -119,7 +132,7 @@ tput civis
 cabecera="Moneda;Siglas;Cantidad;PrecioCompra \$;Precio Actual \$;Valor Inicial \$;ValorActual \$;Perdida/Ganancia \$"
 echo $cabecera >> ut.table
 
-for i in $(cat criptos2.txt); do
+for i in $(cat $criptos); do
         precio_compra=$(echo $i | awk  '{print $4}' FS=";" | tr -d '.')
         nombre=$(echo $i | awk '{print $1}' FS=";" | tr -d '.')
         siglas=$(echo $i | awk '{print $2}' FS=";" | tr -d '.')
@@ -128,13 +141,8 @@ for i in $(cat criptos2.txt); do
         else
                 precio_act=$(curl -s "https://coinmarketcap.com/es/currencies/$(echo $nombre | tr -d ' ')/" | html2text | grep -A 1 "Price:" | tail -n 1 | tr -d '\$' | tr '.' ',' | sed 's/,//')
         fi
-        if [ ! $(echo $nombre | grep -i -E "shiba") ]; then
-                cantidadComprada=$(echo $i | awk '{print $3}' FS=";" | tr -d '.')
-        else
-                cantidadComprada=$(echo $i | awk '{print $3}' FS=";" | tr -d '.' | tr -d ',')
-        fi
-        #val_ini=$(echo $i | awk '{print $5}' FS=";" | tr -d '.')
-        val_ini=$(bc <<< "scale=4; $(echo $cantidadComprada | tr ',' '.') * $(echo $precio_compra | tr ',' '.')")
+        cantidadComprada=$(echo $i | awk '{print $3}' FS=";" | tr -d '.')
+        val_ini=$(bc <<< "scale=4; $(echo $cantidadComprada | tr ',' '.') * $(echo $precio_compra | tr ',' '.')" | tr '.' ',')
         echo $val_ini | tr -d ' ' >> valor_ini.count
         val_act=$(bc <<< "scale=4; $(echo $cantidadComprada | tr ',' '.') * $(echo $precio_act | tr ',' '.')")
         echo $val_act >> valor_act.count
