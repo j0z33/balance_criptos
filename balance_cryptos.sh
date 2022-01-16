@@ -30,7 +30,7 @@ if [[ ! ${criptos} || ! -f $criptos  ]]; then
         echo -e "\n${yellowColour}[*]Debes indicar un fichero con los valores de las criptomonedas separados por ;(punto y coma). Aplicados en el siguiente orden:${endColour}"
         echo -e "${yellowColour}   NombreMoneda;siglasMoneda;CantidadComprada;PrecioCompra${endColour}"
         echo -e "${yellowColour}[-]El nombre de la moneda tiene que coincidir con el nombre de la URL de coinmarketcap.com${endColour}"
-        echo -e "${yellowColour}[-]Para Bitcoin sería bitcoin ya que acaba así: https://coinmarketcap.com/es/currencies/bitcoin/${endColour}"
+        echo -e "${yellowColour}[-]Para Bitcoin sería bitcoin ya que la terminación de la URL es la siguiente: https://coinmarketcap.com/es/currencies/bitcoin/${endColour}"
         echo -e "\t\n${blueColour}  Ejemplo:${endColour}"
         echo -e "\t\t${blueColour}  bitcoin;BTC;0,00114316;42.893${endColour}\n"
 
