@@ -1,4 +1,4 @@
-# balance_cryptos
+# balance_criptos
 [*]Debes indicar un fichero con los valores de las criptomonedas separados por ;(punto y coma). Aplicados en el siguiente orden:
 
                  NombreMoneda;siglasMoneda;CantidadComprada;PrecioCompra
