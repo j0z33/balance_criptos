@@ -33,6 +33,8 @@ if [[ ! ${criptos} || ! -f $criptos  ]]; then
         echo -e "${yellowColour}[-]Para Bitcoin sería bitcoin ya que la terminación de la URL es la siguiente: https://coinmarketcap.com/es/currencies/bitcoin/${endColour}"
         echo -e "\t\n${blueColour}  Ejemplo:${endColour}"
         echo -e "\t\t${blueColour}  bitcoin;BTC;0,00114316;42.893${endColour}\n"
+        echo -e ""
+        echo -e "${yellowColour}[+]Dependencia: html2text${endColour}"
 
         tput cnorm; exit 1
 fi
@@ -133,14 +135,17 @@ cabecera="Moneda;Siglas;Cantidad;PrecioCompra \$;Precio Actual \$;Valor Inicial 
 echo $cabecera >> ut.table
 
 for i in $(cat $criptos); do
+                precio_act=""
         precio_compra=$(echo $i | awk  '{print $4}' FS=";" | tr -d '.')
         nombre=$(echo $i | awk '{print $1}' FS=";" | tr -d '.')
         siglas=$(echo $i | awk '{print $2}' FS=";" | tr -d '.')
-        if [ ! $(echo $nombre | grep -i -E "bitcoin|ethereum") ]; then
-                precio_act=$(curl -s "https://coinmarketcap.com/es/currencies/$(echo $nombre | tr -d ' ')/" | html2text | grep -A 1 "Price:" | tail -n 1 | tr -d '\$' | tr '.' ',')
-        else
-                precio_act=$(curl -s "https://coinmarketcap.com/es/currencies/$(echo $nombre | tr -d ' ')/" | html2text | grep -A 1 "Price:" | tail -n 1 | tr -d '\$' | tr '.' ',' | sed 's/,//')
-        fi
+                while [ "$(echo $precio_act)" == ""  ]; do
+                if [ ! $(echo $nombre | grep -i -E "bitcoin|ethereum") ]; then
+                    precio_act=$(curl -s "https://coinmarketcap.com/es/currencies/$(echo $nombre | tr -d ' ')/" | html2text | grep -A 1 "Price:" | tail -n 1 | tr -d '\$' | tr '.' ',')
+                else
+                    precio_act=$(curl -s "https://coinmarketcap.com/es/currencies/$(echo $nombre | tr -d ' ')/" | html2text | grep -A 1 "Price:" | tail -n 1 | tr -d '\$' | tr '.' ',' | sed 's/,//')
+                fi
+        done
         cantidadComprada=$(echo $i | awk '{print $3}' FS=";" | tr -d '.')
         val_ini=$(bc <<< "scale=4; $(echo $cantidadComprada | tr ',' '.') * $(echo $precio_compra | tr ',' '.')" | tr '.' ',')
         echo $val_ini | tr -d ' ' >> valor_ini.count
