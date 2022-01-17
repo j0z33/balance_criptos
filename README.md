@@ -3,12 +3,11 @@
 
                  NombreMoneda;siglasMoneda;CantidadComprada;PrecioCompra
    
-[-]El nombre de la moneda tiene que coincidir con el nombre de la URL de coinmarketcap.com
+[-]Es importante poner las siglas correctas de cada moneda
 
-[-]Para Bitcoin sería bitcoin ya que la terminación de la URL es la siguiente: https://coinmarketcap.com/es/currencies/bitcoin/
 
   Ejemplo:
                  
                  bitcoin;BTC;0,00114316;42.893
 
-[+]Dependencia: html2text
+
