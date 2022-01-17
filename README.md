@@ -10,3 +10,5 @@
   Ejemplo:
                  
                  bitcoin;BTC;0,00114316;42.893
+
+[+]Dependencia: html2text
