@@ -10,4 +10,6 @@
                  
                  bitcoin;BTC;0,00114316;42.893
 
-
+  Ejecución:
+                 
+                 .\balance_criptos.sh fichero_criptos.txt
